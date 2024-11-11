@@ -13,6 +13,7 @@ export class AdminsController {
 
  
   @Get('/all')
+  @Roles('super_admin')
   findAll() {
     return this.adminsService.findAll();
   }

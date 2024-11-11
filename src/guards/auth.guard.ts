@@ -19,13 +19,11 @@ export class AuthGuard implements CanActivate {
         if (!token) {
             throw new HttpException('Token not provided', HttpStatus.UNAUTHORIZED);
         }
-        console.log(token);
         
 
         try {
             const payload = this.jwtService.verify(token, { secret: this.configService.get<string>('JWT_SECRET') });
             const user: User = await this.userService.findOneUser(payload.id);
-            console.log(user);
             
             if (!user) {
                 throw new HttpException('Siz registratsiyadan o\'tmagansiz', HttpStatus.UNAUTHORIZED);

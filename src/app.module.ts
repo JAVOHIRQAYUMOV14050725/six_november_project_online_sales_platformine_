@@ -43,6 +43,7 @@ import { TranslationsModule } from './translations/translations.module';
 import { CompaniesModule } from './companies/companies.module';
 import { CompanyProductsModule } from './company_products/company_products.module';
 import { Admin } from './admins/entities/admin.entity';
+import { AdminsModule } from './admins/admins.module';
 
 
 @Module({
@@ -80,7 +81,7 @@ import { Admin } from './admins/entities/admin.entity';
     CartModule,
     CategoriesModule,
     InventoryModule,
-    Admin,
+    AdminsModule,
     InventoryLocationsModule,
     PaymentStatusesModule,
     ProductImagesModule,

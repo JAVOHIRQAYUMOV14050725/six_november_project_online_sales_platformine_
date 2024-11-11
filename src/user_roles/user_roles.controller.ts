@@ -5,12 +5,12 @@ import { UserRolesService } from './user_roles.service';
 import { Roles } from '../decorators/roles.decorator';
 
 @Controller('user-roles')
-@UseGuards(AuthGuard, RolesGuard) 
+@UseGuards(AuthGuard, RolesGuard)
 export class UserRolesController {
   constructor(private readonly userRolesService: UserRolesService) { }
 
   @Patch(':id/role/admin')
-  @Roles('super_admin')  
+  @Roles('super_admin')
   async assignAdminRole(@Param('id') userId: number) {
     try {
       return await this.userRolesService.assignRole(userId, 'admin');

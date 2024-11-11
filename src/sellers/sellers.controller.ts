@@ -1,34 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SellersService } from './sellers.service';
-import { CreateSellerDto } from './dto/create-seller.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { SellerService } from './sellers.service';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 
-@Controller('sellers')
-export class SellersController {
-  constructor(private readonly sellersService: SellersService) {}
 
-  @Post()
-  create(@Body() createSellerDto: CreateSellerDto) {
-    return this.sellersService.create(createSellerDto);
-  }
+@Controller('seller')
+@UseGuards(AuthGuard, RolesGuard)
+export class SellerController {
+  constructor(private readonly sellerService: SellerService) { }
 
-  @Get()
+
+  @Get('/all')
+  @Roles('super_admin','admin','manager')
   findAll() {
-    return this.sellersService.findAll();
+    return this.sellerService.findAll();
   }
 
   @Get(':id')
+  @Roles('super_admin', 'admin', 'manager')
   findOne(@Param('id') id: string) {
-    return this.sellersService.findOne(+id);
+    console.log('Looking for admin with id:', id);
+    return this.sellerService.findOne(+id);
   }
 
   @Patch(':id')
+  @Roles('super_admin', 'admin')
   update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
-    return this.sellersService.update(+id, updateSellerDto);
+    return this.sellerService.update(+id, updateSellerDto);
   }
 
   @Delete(':id')
+  @Roles('super_admin','admin')
   remove(@Param('id') id: string) {
-    return this.sellersService.remove(+id);
+    return this.sellerService.remove(+id);
   }
 }

@@ -20,6 +20,8 @@ export class UserRolesService {
     @InjectRepository(Seller) private sellerRepository: Repository<Seller>,
   ) { }
 
+  
+
   async assignRole(userId: number, roleName: 'admin' | 'manager' | 'seller' | 'user'): Promise<User | { users: { id: number, name: string }[] }> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
@@ -37,13 +39,13 @@ export class UserRolesService {
         throw new NotFoundException('Foydalanuvchi yoki rol topilmadi');
       }
 
-      
+
 
       // user roli bo'lgan mavjud foydalanuvchilarni qaytarish
       return { users: existingUsers };
     }
 
- 
+
 
     // Foydalanuvchi allaqachon mavjud bo'lgan rolni olganligini tekshirish
     const existingRole = user.roles?.find(userRole => userRole.role?.name === roleName);
