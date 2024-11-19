@@ -10,7 +10,6 @@ import { UserRole } from 'src/user_roles/entities/user_role.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role, User,UserRole]),
-    
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },

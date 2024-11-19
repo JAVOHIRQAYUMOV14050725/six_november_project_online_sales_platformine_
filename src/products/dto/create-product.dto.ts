@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, Min, MaxLength, MinLength, IsOptional, IsPositive } from "class-validator";
+import { Unique } from "typeorm";
 
 export class CreateProductDto {
   @IsNotEmpty()
