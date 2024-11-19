@@ -20,7 +20,7 @@ export class UserRolesService {
     @InjectRepository(Seller) private sellerRepository: Repository<Seller>,
   ) { }
 
-  
+
 
   async assignRole(userId: number, roleName: 'admin' | 'manager' | 'seller' | 'user'): Promise<User | { users: { id: number, name: string }[] }> {
     const user = await this.userRepository.findOne({

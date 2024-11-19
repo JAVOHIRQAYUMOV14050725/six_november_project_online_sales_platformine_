@@ -1,26 +1,33 @@
+// src/activity-logs/activity-log.service.ts
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ActivityLog } from './entities/activity_log.entity';
+import { User } from '../users/entities/user.entity';
 import { CreateActivityLogDto } from './dto/create-activity_log.dto';
-import { UpdateActivityLogDto } from './dto/update-activity_log.dto';
 
 @Injectable()
-export class ActivityLogsService {
-  create(createActivityLogDto: CreateActivityLogDto) {
-    return 'This action adds a new activityLog';
-  }
+export class ActivityLogService {
+  constructor(
+    @InjectRepository(ActivityLog)
+    private readonly activityLogRepository: Repository<ActivityLog>,
 
-  findAll() {
-    return `This action returns all activityLogs`;
-  }
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) { }
 
-  findOne(id: number) {
-    return `This action returns a #${id} activityLog`;
-  }
+  async createLog(createActivityLogDto: CreateActivityLogDto): Promise<ActivityLog> {
+    const { action, user_id } = createActivityLogDto;
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
 
-  update(id: number, updateActivityLogDto: UpdateActivityLogDto) {
-    return `This action updates a #${id} activityLog`;
-  }
+    if (!user) {
+      throw new Error('Foydalanuvchi topilmadi');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} activityLog`;
+    const log = new ActivityLog();
+    log.user = user;
+    log.action = action;
+
+    return await this.activityLogRepository.save(log);
   }
 }

@@ -42,7 +42,7 @@ export class UserRolesController {
   }
 
   @Patch(':id/role/seller')
-  @Roles('super_admin', 'admin', 'manager')  // super_admin, admin yoki manager roli bilan faollashtiriladi
+  @Roles('super_admin', 'admin', 'manager')  
   async assignSellerRole(@Param('id') userId: number) {
     try {
       return await this.userRolesService.assignRole(userId, 'seller');
@@ -57,9 +57,8 @@ export class UserRolesController {
     }
   }
 
-  // User rolini tayinlash (faqat super_admin yoki admin mumkin)
   @Patch(':id/role/user')
-  @Roles('super_admin', 'admin')  // super_admin yoki admin roli bilan faollashtiriladi
+  @Roles('super_admin', 'admin')
   async assignUserRole(@Param('id') userId: number) {
     try {
       return await this.userRolesService.assignRole(userId, 'user');
