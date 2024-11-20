@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 export class CategoriesService {
   constructor(
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
-  ) {}
+  ) { }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
     const existingCategory = await this.findByName(createCategoryDto.name);
@@ -26,7 +26,17 @@ export class CategoriesService {
   }
 
   async findOne(id: number): Promise<Category> {
-    return await this.categoryRepository.findOneBy({ id });
+    const category = await this.categoryRepository.findOne({ where: { id } });
+
+    if (!category) {
+      const allCategories = await this.findAll();
+      throw new NotFoundException({
+        message: `Category with ID ${id} not found`,
+        allCategories,
+      });
+    }
+
+    return category;
   }
 
   async findByName(name: string): Promise<Category | undefined> {
@@ -35,17 +45,29 @@ export class CategoriesService {
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     const category = await this.findOne(id);
-    
-    if (!category) {
-        throw new NotFoundException(`Category with ID ${id} not found`);
+
+    if (updateCategoryDto.name && updateCategoryDto.name !== category.name) {
+      const existingCategory = await this.findByName(updateCategoryDto.name);
+      if (existingCategory) {
+        throw new ConflictException(`Category name '${updateCategoryDto.name}' is already taken`);
+      }
     }
 
     Object.assign(category, updateCategoryDto);
-    
     return await this.categoryRepository.save(category);
   }
 
   async remove(id: number): Promise<void> {
-    await this.categoryRepository.delete(id);
+    const category = await this.categoryRepository.findOne({ where: { id } });
+
+    if (!category) {
+      const allCategories = await this.findAll();
+      throw new NotFoundException({
+        message: `Category with ID ${id} not found`,
+        allCategories,
+      });
+    }
+
+    await this.categoryRepository.remove(category);
   }
 }

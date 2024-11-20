@@ -26,8 +26,8 @@ export class CreateCompanyDto {
     @Length(1, 100)
     email: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
     @Length(1, 100)
-    website?: string;
+    website: string;
 }

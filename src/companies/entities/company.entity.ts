@@ -7,7 +7,7 @@ export class Company {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 100, unique:true })
+    @Column({ unique: true, length: 100 })
     name: string;
 
     @Column({ type: 'text' })
@@ -16,7 +16,7 @@ export class Company {
     @Column({ length: 255 })
     address: string;
 
-    @Column({ length: 15 })
+    @Column({ unique: true ,length: 15})
     phone_number: string;
 
     @Column({ unique: true, length: 100 })

@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { CompanyProductsService } from './company_products.service';
 import { CreateCompanyProductDto } from './dto/create-company_product.dto';
 import { UpdateCompanyProductDto } from './dto/update-company_product.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
-@Controller('company-products')
+@Controller('companyProducts')
+@UseGuards(AuthGuard, RolesGuard)
 export class CompanyProductsController {
-  constructor(private readonly companyProductsService: CompanyProductsService) {}
+  constructor(private readonly companyProductsService: CompanyProductsService) { }
 
   @Post()
-  create(@Body() createCompanyProductDto: CreateCompanyProductDto) {
-    return this.companyProductsService.create(createCompanyProductDto);
+    @Roles('super_admin','admin','manager')
+  async create(@Body() createCompanyProductDto: CreateCompanyProductDto) {
+    return await this.companyProductsService.create(createCompanyProductDto);
   }
 
   @Get()
-  findAll() {
-    return this.companyProductsService.findAll();
+  @Roles('super_admin', 'admin', 'manager','seller')
+  async findAll() {
+    return await this.companyProductsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.companyProductsService.findOne(+id);
+  @Roles('super_admin', 'admin', 'manager','seller')
+  async findOne(@Param('id') id: string) {
+    return await this.companyProductsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyProductDto: UpdateCompanyProductDto) {
-    return this.companyProductsService.update(+id, updateCompanyProductDto);
+  @Roles('super_admin', 'admin', 'manager')
+  async update(
+    @Param('id') id: string,
+    @Body() updateCompanyProductDto: UpdateCompanyProductDto,
+  ) {
+    return await this.companyProductsService.update(+id, updateCompanyProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companyProductsService.remove(+id);
+  @Roles('super_admin', 'admin', 'manager')
+  async remove(@Param('id') id: string) {
+    return await this.companyProductsService.remove(+id);
   }
 }
