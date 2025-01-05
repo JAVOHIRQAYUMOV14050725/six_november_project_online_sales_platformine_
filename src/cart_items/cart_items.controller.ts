@@ -1,34 +1,55 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  ForbiddenException,
+} from '@nestjs/common';
 import { CartItemsService } from './cart_items.service';
 import { CreateCartItemDto } from './dto/create-cart_item.dto';
 import { UpdateCartItemDto } from './dto/update-cart_item.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Request } from 'express';
 
 @Controller('cart-items')
+@UseGuards(AuthGuard)
 export class CartItemsController {
-  constructor(private readonly cartItemsService: CartItemsService) {}
+  constructor(private readonly cartItemsService: CartItemsService) { }
 
   @Post()
-  create(@Body() createCartItemDto: CreateCartItemDto) {
-    return this.cartItemsService.create(createCartItemDto);
+  async create(@Body() createCartItemDto: CreateCartItemDto, @Req() req: Request) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new ForbiddenException('Foydalanuvchi autentifikatsiya qilinmagan!');
+    }
+    return this.cartItemsService.create({ ...createCartItemDto, userId });
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.cartItemsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.cartItemsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartItemDto: UpdateCartItemDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCartItemDto: UpdateCartItemDto,
+  ) {
     return this.cartItemsService.update(+id, updateCartItemDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.cartItemsService.remove(+id);
   }
 }

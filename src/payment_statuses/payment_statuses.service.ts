@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePaymentStatusDto } from './dto/create-payment_status.dto';
 import { UpdatePaymentStatusDto } from './dto/update-payment_status.dto';
+import { PaymentStatus } from './entities/payment_status.entity';
 
 @Injectable()
 export class PaymentStatusesService {
-  create(createPaymentStatusDto: CreatePaymentStatusDto) {
-    return 'This action adds a new paymentStatus';
+  constructor(
+    @InjectRepository(PaymentStatus)
+    private readonly paymentStatusRepository: Repository<PaymentStatus>,
+  ) { }
+
+  async create(createPaymentStatusDto: CreatePaymentStatusDto): Promise<PaymentStatus> {
+    const paymentStatus = this.paymentStatusRepository.create(createPaymentStatusDto);
+    return await this.paymentStatusRepository.save(paymentStatus);
   }
 
-  findAll() {
-    return `This action returns all paymentStatuses`;
+  async findAll(): Promise<PaymentStatus[]> {
+    return await this.paymentStatusRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} paymentStatus`;
+  async findOne(id: number): Promise<PaymentStatus> {
+    const paymentStatus = await this.paymentStatusRepository.findOne({ where: { id } });
+
+    if (!paymentStatus) {
+      throw new NotFoundException(`Payment status with ID ${id} not found`);
+    }
+
+    return paymentStatus;
   }
 
-  update(id: number, updatePaymentStatusDto: UpdatePaymentStatusDto) {
-    return `This action updates a #${id} paymentStatus`;
+  async update(id: number, updatePaymentStatusDto: UpdatePaymentStatusDto): Promise<PaymentStatus> {
+    const paymentStatus = await this.findOne(id);
+
+    Object.assign(paymentStatus, updatePaymentStatusDto);
+
+    return await this.paymentStatusRepository.save(paymentStatus);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} paymentStatus`;
+  async remove(id: number): Promise<void> {
+    const paymentStatus = await this.findOne(id);
+
+    await this.paymentStatusRepository.remove(paymentStatus);
   }
 }
