@@ -6,7 +6,7 @@ export class ActivityLog {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, user => user.activityLogs) 
+    @ManyToOne(() => User, user => user.activityLogs, { onDelete: 'CASCADE' }) 
     @JoinColumn({ name: 'user_id' })
     user: User;
 

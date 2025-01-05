@@ -7,6 +7,7 @@ export class CreateInventoryDto {
     product_id: number;
 
     @IsInt()
+    @IsNotEmpty()
     @IsPositive()
     @Min(1, { message: 'Quantity must be a positive integer greater than 0' })
     quantity: number;

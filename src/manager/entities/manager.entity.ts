@@ -21,7 +21,7 @@ export class Manager {
     @UpdateDateColumn()
     updated_at: Date;
 
-    @ManyToMany(() => Company, (company) => company.managers)
+    @ManyToMany(() => Company, (company) => company.managers, { onDelete: 'CASCADE' })
     companies: Company[];
 
     @ManyToOne(() => User, (user) => user.manager, { onDelete: 'CASCADE' })

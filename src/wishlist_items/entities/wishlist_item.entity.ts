@@ -7,11 +7,11 @@ export class WishlistItem {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Wishlist, (wishlist) => wishlist.wishlistItems)
+    @ManyToOne(() => Wishlist, (wishlist) => wishlist.wishlistItems, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'wishlist_id' })
     wishlist: Wishlist;
 
-    @ManyToOne(() => Product, (product) => product.wishlistItems)
+    @ManyToOne(() => Product, (product) => product.wishlistItems, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'product_id' })  
     product: Product;
 

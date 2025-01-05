@@ -13,7 +13,6 @@ import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 import { ShoppingCart } from 'src/shopping_cart/entities/shopping_cart.entity';
 import { Seller } from 'src/sellers/entities/seller.entity';
 import { Cart } from 'src/cart/entities/cart.entity';
-import { Role } from 'src/roles/entities/role.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity()
@@ -57,12 +56,12 @@ export class User {
     @JoinColumn({ name: 'seller_id' })  
     seller: Seller;
 
-    @ManyToMany(() => Address, address => address.users)
+    @ManyToMany(() => Address, address => address.users, { onDelete: 'CASCADE' })
     @Exclude()
     @JoinTable() 
     addresses: Address[];
 
-    @ManyToMany(() => Order, order => order.users)
+    @ManyToMany(() => Order, order => order.users, { onDelete: 'CASCADE' })
     @Exclude()
     @JoinTable() 
     orders: Order[];

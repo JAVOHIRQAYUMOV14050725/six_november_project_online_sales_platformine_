@@ -9,14 +9,14 @@ export class CartItem {
     @PrimaryGeneratedColumn()
     id: number; 
 
-    @ManyToMany(() => ShoppingCart, shoppingCart => shoppingCart.cartItems)
+    @ManyToMany(() => ShoppingCart, shoppingCart => shoppingCart.cartItems, { onDelete: 'CASCADE' })
     shoppingCarts: ShoppingCart[];
 
-    @ManyToOne(() => Product, (product) => product.cartItems)
+    @ManyToOne(() => Product, (product) => product.cartItems, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'product_id' })  
     product: Product;
 
-    @ManyToOne(() => Cart, (cart) => cart.cartItems)
+    @ManyToOne(() => Cart, (cart) => cart.cartItems, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'cart_id' })
     cart: Cart;
 

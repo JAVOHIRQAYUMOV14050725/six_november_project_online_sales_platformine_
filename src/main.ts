@@ -3,6 +3,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './exception_filter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -26,8 +27,24 @@ async function bootstrap() {
   app.use(cookieParser());
 
 
+  const config = new DocumentBuilder()
+    .setTitle('Company Products API')
+    .setDescription('Company Products API documentation')
+    .setVersion('1.0')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT' 
+    })
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+
+
   await app.listen(3000); 
-  console.log(`port run on 3000`);
+  console.log(`Application is running on: http://localhost:3000`);
+
   
 }
 

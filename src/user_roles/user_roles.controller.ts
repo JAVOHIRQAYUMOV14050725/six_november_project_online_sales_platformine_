@@ -26,7 +26,7 @@ export class UserRolesController {
   }
 
   @Patch(':id/role/manager')
-  @Roles('super_admin', 'admin')
+  @Roles('super_admin')
   async assignManagerRole(@Param('id') userId: number) {
     try {
       return await this.userRolesService.assignRole(userId, 'manager');
@@ -35,14 +35,14 @@ export class UserRolesController {
         throw new NotFoundException('Foydalanuvchi yoki rol topilmadi');
       }
       if (error instanceof ForbiddenException) {
-        throw new ForbiddenException('Manager rolini faqat super_admin yoki admin tayinlashi mumkin');
+        throw new ForbiddenException('Manager rolini faqat super_admin  tayinlashi mumkin');
       }
       throw error;
     }
   }
 
   @Patch(':id/role/seller')
-  @Roles('super_admin', 'admin', 'manager')  
+  @Roles('super_admin')  
   async assignSellerRole(@Param('id') userId: number) {
     try {
       return await this.userRolesService.assignRole(userId, 'seller');
@@ -51,14 +51,14 @@ export class UserRolesController {
         throw new NotFoundException('Foydalanuvchi yoki rol topilmadi');
       }
       if (error instanceof ForbiddenException) {
-        throw new ForbiddenException('Seller rolini faqat super_admin, admin yoki manager tayinlashi mumkin');
+        throw new ForbiddenException('Seller rolini faqat super_admin tayinlashi mumkin');
       }
       throw error;
     }
   }
 
   @Patch(':id/role/user')
-  @Roles('super_admin', 'admin')
+  @Roles('super_admin')
   async assignUserRole(@Param('id') userId: number) {
     try {
       return await this.userRolesService.assignRole(userId, 'user');
@@ -67,7 +67,7 @@ export class UserRolesController {
         throw new NotFoundException('Foydalanuvchi yoki rol topilmadi');
       }
       if (error instanceof ForbiddenException) {
-        throw new ForbiddenException('User rolini faqat super_admin yoki admin tayinlashi mumkin');
+        throw new ForbiddenException('User rolini faqat super_admin tayinlashi mumkin');
       }
       throw error;
     }

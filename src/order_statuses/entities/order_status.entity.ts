@@ -9,7 +9,7 @@ export class OrderStatus {
     @Column()
     status: string;
 
-    @ManyToMany(() => Order, order => order.orderStatus)
+    @ManyToMany(() => Order, order => order.orderStatus, { onDelete: 'CASCADE' })
     @JoinTable()  
     orders: Order[];
 }

@@ -27,11 +27,11 @@ export class Review {
   @Column('text')
   comment: string;
 
-  @ManyToOne(() => User, (user) => user.reviews, { eager: true })
+  @ManyToOne(() => User, (user) => user.reviews, { eager: true ,onDelete:'CASCADE'})
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Product, (product) => product.reviews)
+  @ManyToOne(() => Product, (product) => product.reviews, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'product_id' }) 
   product: Product;
 

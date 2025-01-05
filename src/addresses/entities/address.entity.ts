@@ -6,7 +6,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDa
 export class Address {
     @PrimaryGeneratedColumn()
     id: number;
-    @ManyToMany(() => User, user => user.addresses)
+    @ManyToMany(() => User, user => user.addresses, { onDelete: 'CASCADE' })
     users: User[];
 
     @Column({ length: 255 })

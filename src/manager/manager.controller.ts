@@ -13,26 +13,26 @@ export class ManagerController {
 
 
   @Get('/all')
-  @Roles('super_admin','admin')
+  @Roles('super_admin')
   findAll() {
     return this.managerService.findAll();
   }
 
   @Get(':id')
-  @Roles('super_admin','admin')
+  @Roles('super_admin')
   findOne(@Param('id') id: string) {
     console.log('Looking for admin with id:', id);
     return this.managerService.findOne(+id);
   }
 
   @Patch(':id')
-  @Roles('super_admin','admin')
+  @Roles('super_admin')
   update(@Param('id') id: string, @Body() updateManagerDto: UpdateManagerDto) {
     return this.managerService.update(+id, updateManagerDto);
   }
 
   @Delete(':id')
-  @Roles('super_admin','manager')
+  @Roles('super_admin')
   remove(@Param('id') id: string) {
     return this.managerService.remove(+id);
   }

@@ -52,7 +52,7 @@ export class Product {
   @OneToMany(() => ProductImage, (productImage) => productImage.product)
   productImages: ProductImage[];
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products,{onDelete: 'CASCADE'}  )
   @JoinColumn({ name: 'category_id' }) 
   category: Category;
 

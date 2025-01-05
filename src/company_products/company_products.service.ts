@@ -25,7 +25,7 @@ export class CompanyProductsService {
     const company = await this.companyRepository.findOne({ where: { id: company_id } });
     const product = await this.productRepository.findOne({ where: { id: product_id } });
 
-    if (!company || !product) {
+    if (!company && !product) {
       const companies = await this.companyRepository.find({ select: ['id', 'name'] });
       const products = await this.productRepository.find({ select: ['id', 'name'] });
 
@@ -33,6 +33,30 @@ export class CompanyProductsService {
         {
           message: 'Invalid company or product ID.',
           companies,
+          products,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!company ) {
+      const companies = await this.companyRepository.find({ select: ['id', 'name'] });
+
+      throw new HttpException(
+        {
+          message: 'Invalid company  ID.',
+          companies,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!product) {
+      const products = await this.productRepository.find({ select: ['id', 'name'] });
+
+      throw new HttpException(
+        {
+          message: 'Invalid  product ID.',
           products,
         },
         HttpStatus.BAD_REQUEST,

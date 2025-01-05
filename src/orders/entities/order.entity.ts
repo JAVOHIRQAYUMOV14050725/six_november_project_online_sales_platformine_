@@ -24,10 +24,10 @@ export class Order {
     @OneToMany(() => OrderItem, orderItems => orderItems.order)
     orderItems: OrderItem[];
 
-    @ManyToMany(() => User, user => user.orders)
+    @ManyToMany(() => User, user => user.orders, { onDelete: 'CASCADE' })
     users: User[];
 
-    @ManyToMany(() => OrderStatus, orderStatus => orderStatus.orders)
+    @ManyToMany(() => OrderStatus, orderStatus => orderStatus.orders, { onDelete: 'CASCADE' })
     statuses: OrderStatus[];
     orderStatus: any;
 }

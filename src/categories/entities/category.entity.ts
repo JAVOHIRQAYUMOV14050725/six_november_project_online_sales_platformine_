@@ -9,7 +9,7 @@ export class Category {
     @Column({ length: 100 , unique:true})
     name: string;
 
-    @ManyToOne(() => Category, (category) => category.subCategories, { nullable: true })
+    @ManyToOne(() => Category, (category) => category.subCategories,  { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'parent_category_id' }) 
     parentCategory: Category;  
 

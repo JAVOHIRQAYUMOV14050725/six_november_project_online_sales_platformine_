@@ -25,7 +25,7 @@ export class Company {
     @Column({ length: 100, nullable: true })
     website: string;
 
-    @ManyToMany(() => Manager, (manager) => manager.companies)
+    @ManyToMany(() => Manager, (manager) => manager.companies, { onDelete: 'CASCADE' })
     @JoinTable() 
     managers: Manager[];
 

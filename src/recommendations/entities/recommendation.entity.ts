@@ -8,11 +8,11 @@ export class Recommendation {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, (user) => user.recommendations)
+    @ManyToOne(() => User, (user) => user.recommendations, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @ManyToOne(() => Product, (product) => product.recommendations)
+    @ManyToOne(() => Product, (product) => product.recommendations, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'product_id' })
     product: Product;
 

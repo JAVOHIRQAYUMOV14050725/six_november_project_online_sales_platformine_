@@ -1,3 +1,4 @@
+// src/inventory_locations/inventory_locations.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { InventoryLocationsService } from './inventory_locations.service';
 import { CreateInventoryLocationDto } from './dto/create-inventory_location.dto';
@@ -5,7 +6,7 @@ import { UpdateInventoryLocationDto } from './dto/update-inventory_location.dto'
 
 @Controller('inventory-locations')
 export class InventoryLocationsController {
-  constructor(private readonly inventoryLocationsService: InventoryLocationsService) {}
+  constructor(private readonly inventoryLocationsService: InventoryLocationsService) { }
 
   @Post()
   create(@Body() createInventoryLocationDto: CreateInventoryLocationDto) {

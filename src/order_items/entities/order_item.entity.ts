@@ -12,13 +12,13 @@ export class OrderItem {
     @Column()
     order_id: number;
 
-    @ManyToOne(() => Order, order => order.orderItems)
+    @ManyToOne(() => Order, order => order.orderItems, { onDelete: 'CASCADE' })
     order: Order;
 
     @Column()
     product_id: number;
 
-    @ManyToOne(() => Product, product => product.orderItems)
+    @ManyToOne(() => Product, product => product.orderItems, { onDelete: 'CASCADE' })
     product: Product;
 
     @Column()

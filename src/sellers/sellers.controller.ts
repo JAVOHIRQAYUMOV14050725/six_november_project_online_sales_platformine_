@@ -14,26 +14,26 @@ export class SellerController {
 
 
   @Get('/all')
-  @Roles('super_admin','admin','manager')
+  @Roles('super_admin')
   findAll() {
     return this.sellerService.findAll();
   }
 
   @Get(':id')
-  @Roles('super_admin', 'admin', 'manager')
+  @Roles('super_admin')
   findOne(@Param('id') id: string) {
     console.log('Looking for admin with id:', id);
     return this.sellerService.findOne(+id);
   }
 
   @Patch(':id')
-  @Roles('super_admin', 'admin')
+  @Roles('super_admin')
   update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
     return this.sellerService.update(+id, updateSellerDto);
   }
 
   @Delete(':id')
-  @Roles('super_admin','admin')
+  @Roles('super_admin')
   remove(@Param('id') id: string) {
     return this.sellerService.remove(+id);
   }

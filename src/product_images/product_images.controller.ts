@@ -1,34 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ProductImagesService } from './product_images.service';
 import { CreateProductImageDto } from './dto/create-product_image.dto';
 import { UpdateProductImageDto } from './dto/update-product_image.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
-@Controller('product-images')
+@Controller('productImages')
 export class ProductImagesController {
-  constructor(private readonly productImagesService: ProductImagesService) {}
+  constructor(private readonly productImagesService: ProductImagesService) { }
 
   @Post()
-  create(@Body() createProductImageDto: CreateProductImageDto) {
-    return this.productImagesService.create(createProductImageDto);
+  @UseGuards(AuthGuard, RolesGuard)
+    @Roles('admin','manager', 'super_admin','seller')
+  async create(@Body() createProductImageDto: CreateProductImageDto) {
+    const image = await this.productImagesService.create(createProductImageDto);
+    return { message: 'Product image created successfully', image };
   }
 
   @Get()
-  findAll() {
-    return this.productImagesService.findAll();
+  @UseGuards(AuthGuard)
+  async findAll() {
+    const images = await this.productImagesService.findAll();
+    return { message: 'All product images retrieved successfully', images };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productImagesService.findOne(+id);
+  @UseGuards(AuthGuard)
+  async findOne(@Param('id') id: string) {
+    const image = await this.productImagesService.findOne(+id);
+    return { message: 'Product image retrieved successfully', image };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductImageDto: UpdateProductImageDto) {
-    return this.productImagesService.update(+id, updateProductImageDto);
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin', 'manager', 'super_admin', 'seller')
+  async update(@Param('id') id: string, @Body() updateProductImageDto: UpdateProductImageDto) {
+    const updatedImage = await this.productImagesService.update(+id, updateProductImageDto);
+    return { message: 'Product image updated successfully', updatedImage };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productImagesService.remove(+id);
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin', 'manager', 'super_admin', 'seller')
+  async remove(@Param('id') id: string) {
+    await this.productImagesService.remove(+id);
+    return { message: `Product image with ID ${id} removed successfully` };
   }
 }

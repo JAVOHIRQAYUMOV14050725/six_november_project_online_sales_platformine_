@@ -10,10 +10,10 @@ import { Category } from '../categories/entities/category.entity';
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>, 
+    private readonly productRepository: Repository<Product>,
     @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>, 
-  ) {}
+    private readonly categoryRepository: Repository<Category>,
+  ) { }
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const existingProduct = await this.productRepository.findOne({
@@ -63,21 +63,26 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productRepository.find(); 
+    return this.productRepository.find({ relations: ['productImages'] });  
   }
 
   async findOne(id: number): Promise<Product> {
-    const product = await this.productRepository.findOne({ where: { id } });
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: ['productImages', 'category'], 
+    });
+
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
+
     return product;
   }
 
-
   async search(keyword: string): Promise<Product[]> {
     const products = await this.productRepository.find({
-      where: { name: ILike(`%${keyword}%`) }, 
+      where: { name: ILike(`%${keyword}%`) },
+      relations: ['productImages'], 
     });
 
     if (!products.length) {
@@ -89,33 +94,33 @@ export class ProductsService {
 
   async remove(id: number): Promise<void> {
     const product = await this.findOne(id);
-    await this.productRepository.remove(product); 
+    await this.productRepository.remove(product);
   }
 
   async sortByPriceDesc(): Promise<Product[]> {
     return this.productRepository.find({
       order: {
-        price: 'DESC', 
+        price: 'DESC',
       },
+      relations: ['productImages'],
     });
   }
 
   async sortByPriceAsc(): Promise<Product[]> {
     return this.productRepository.find({
       order: {
-        price: 'ASC', // Narx bo'yicha o'sish tartibi
+        price: 'ASC',
       },
+      relations: ['productImages'], 
     });
   }
 
-  
   async findByPriceRange(minPrice: number, maxPrice: number): Promise<Product[]> {
-    console.log('minPrice:', minPrice, 'maxPrice:', maxPrice); // Debug uchun log
-
     const products = await this.productRepository.find({
       where: {
         price: Between(minPrice, maxPrice),
       },
+      relations: ['productImages'], 
     });
 
     if (!products.length) {
@@ -126,7 +131,4 @@ export class ProductsService {
 
     return products;
   }
-
-
-
 }

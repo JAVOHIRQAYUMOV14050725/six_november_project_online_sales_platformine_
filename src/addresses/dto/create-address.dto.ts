@@ -4,14 +4,10 @@ import { IsString, IsNotEmpty, IsOptional, Length } from 'class-validator';
 export class CreateAddressDto {
     @IsNotEmpty()
     @IsString()
-    user_id: number;  
-
-    @IsNotEmpty()
-    @IsString()
     @Length(1, 255)
     address_line1: string;
 
-    @IsOptional() 
+    @IsNotEmpty()
     @IsString()
     address_line2: string;
 

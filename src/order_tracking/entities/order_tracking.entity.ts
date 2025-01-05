@@ -14,7 +14,7 @@ export class OrderTracking {
     @Column({ type: 'varchar', length: 255 })
     tracking_number: string;
 
-    @ManyToOne(() => TrackingStatus)
+    @ManyToOne(() => TrackingStatus, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'status_id' })
     status: TrackingStatus;
 

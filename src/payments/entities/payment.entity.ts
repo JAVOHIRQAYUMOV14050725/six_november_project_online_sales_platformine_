@@ -17,7 +17,7 @@ export class Payment {
     @Column({ type: 'decimal', precision: 10, scale: 2 })
     amount: number;
 
-    @ManyToOne(() => PaymentStatus, { eager: true }) 
+    @ManyToOne(() => PaymentStatus, { eager: true, onDelete: 'CASCADE' }) 
     @JoinColumn({ name: 'status_id' })
     status: PaymentStatus;
 
